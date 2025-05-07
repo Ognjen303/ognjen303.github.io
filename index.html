@@ -15,6 +15,7 @@
             align-items: center;
             height: 100vh;
         }
+
         .container {
             text-align: center;
             background-color: #fff;
@@ -24,6 +25,7 @@
             max-width: 400px;
             width: 90%;
         }
+
         .profile-img {
             width: 150px;
             height: 150px;
@@ -32,21 +34,24 @@
             margin-bottom: 20px;
             border: 4px solid transparent;
         }
+
         h1 {
             color: #333;
             font-size: 24px;
             margin-bottom: 10px;
         }
+
         .buttons {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-bottom: 20px;
         }
+
         .button {
             display: inline-block;
-            width: 45px; /* Adjust the width of each button */
-            height: 45px; /* Adjust the height of each button */
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background-color: #f4f4f4;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -55,26 +60,35 @@
             align-items: center;
             transition: background-color 0.3s;
         }
+
         .button img {
-            width: 25px; /* Adjust the width of the icon */
-            height: 25px; /* Adjust the height of the icon */
+            width: 25px;
+            height: 25px;
         }
+
         .button:hover {
             background-color: #e0e0e0;
         }
-        /* Style for the My Work Diary link */
+
         .diary-link {
-            color: #007bff; /* Blue text color */
+            color: #007bff;
             font-size: 12px;
             font-weight: bold;
             text-decoration: none;
-            margin-top: 5px; /* Adjust for spacing under the GitHub logo */
-            margin-left: 35px; /* Position to the right of the GitHub logo */
-            display: block; /* Makes the link a block element to control positioning */
+            margin-top: 5px;
+            margin-left: 35px;
+            display: block;
         }
 
         .diary-link:hover {
             text-decoration: underline;
+        }
+
+        .post {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -83,7 +97,7 @@
         <img src="images/profile.jpg" alt="Profile Picture" class="profile-img">
         <h1>Ognjen Stefanović</h1>
         <p>PhD student in AI at Aalto University, Finland.</p>
-        
+
         <div class="buttons-container">
             <div class="buttons">
                 <a href="https://x.com/OggyStefanovic" target="_blank" class="button">
@@ -92,19 +106,44 @@
                 <a href="https://linkedin.com/in/ognjen-stefanovic-25532620b/" target="_blank" class="button">
                     <img src="images/linkedin.svg" alt="LinkedIn">
                 </a>
-                <a href="mailto:stefanovicogi2001@gmail.com" target="_blank" class="button">
+                <a href="mailto:ognjen.stefanovic@aalto.fi" target="_blank" class="button">
                     <img src="images/envelope.svg" alt="Email">
                 </a>
                 <a href="https://github.com/Ognjen303" target="_blank" class="button">
                     <img src="images/github.svg" alt="GitHub">
                 </a>
             </div>
-            
-            <!-- My Work Diary tab linking to the Google Doc -->
-            <a href="https://docs.google.com/document/d/1tyeQOZln0Ge50A9rLvSfpQtrYnox4V1yyhD4GM-uhQE/edit?usp=sharing" target="_blank" class="diary-tab">
-                My Work Diary
-            </a>
         </div>
+
+        <!-- Thoughts Section -->
+        <h2>Random Thoughts</h2>
+        <div id="posts"></div>
     </div>
+
+    <script>
+        async function loadPosts() {
+            try {
+                const response = await fetch('posts.json');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const posts = await response.json();
+                const container = document.getElementById('posts');
+                posts.forEach(post => {
+                    const postElem = document.createElement('div');
+                    postElem.className = "post";
+                    postElem.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <p style="text-align: left; font-size: 14px;"><em>${post.content.split('\n')[0]}</em></p>
+                            <p style="text-align: right; font-size: 12px;">${post.date}</p>
+                        </div>
+                    `;
+                    container.appendChild(postElem);
+                });
+            } catch (error) {
+                console.error("Error loading posts:", error);
+            }
+        }
+        loadPosts();
+    </script>
+
 </body>
 </html>
